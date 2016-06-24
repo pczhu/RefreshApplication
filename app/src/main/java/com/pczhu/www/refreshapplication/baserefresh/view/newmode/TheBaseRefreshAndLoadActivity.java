@@ -55,6 +55,25 @@ public abstract class TheBaseRefreshAndLoadActivity <T> extends Activity
 
     private DataPresenter<T> mDataPresenter;
 
+    private String mErrorDataString = "网络请求出现问题";
+    private String mEmptyDataString = "找不到相关数据";
+
+    /**
+     * 默认错误布局文字
+     * @param mErrorDataString
+     */
+    public void setmErrorDataString(String mErrorDataString) {
+        this.mErrorDataString = mErrorDataString;
+    }
+
+    /**
+     * 默认空数据布局文字
+     * @param mEmptyDataString
+     */
+    public void setmEmptyDataString(String mEmptyDataString) {
+        this.mEmptyDataString = mEmptyDataString;
+    }
+
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -129,29 +148,29 @@ public abstract class TheBaseRefreshAndLoadActivity <T> extends Activity
 
     @Override
     public void showErrorNoMore() {
-        Toast.makeText(this, "网络请求出现问题",Toast.LENGTH_SHORT).show();
-        tv_error.setText("网络请求出现问题");//先设置错误布局的文字提示
+        Toast.makeText(this, mErrorDataString,Toast.LENGTH_SHORT).show();
+        tv_error.setText(mErrorDataString);//先设置错误布局的文字提示
         refreshView(LoadingFooter.State.ERROR_NOMORE);
         setErrorLayout(View.GONE);
     }
 
     @Override
     public void showErrorEmpty() {
-        tv_error.setText("网络请求出现问题");//先设置错误布局的文字提示
+        tv_error.setText(mErrorDataString);//先设置错误布局的文字提示
         refreshView(LoadingFooter.State.ERROR_EMPTY);
         setErrorLayout(View.VISIBLE);
     }
 
     @Override
     public void showEmptyNoMore() {
-        tv_error.setText("没有找到相关数据");//先设置错误布局的文字提示
+        tv_error.setText(mEmptyDataString);//先设置错误布局的文字提示
         refreshView(LoadingFooter.State.EMPTY_NOMORE);
         setErrorLayout(View.VISIBLE);
     }
     @Override
     public void showEmptyTheEnd() {
         Toast.makeText(this,"找不到更多数据",Toast.LENGTH_SHORT).show();
-        tv_error.setText("没有更多数据");//先设置错误布局的文字提示
+        tv_error.setText(mEmptyDataString);//先设置错误布局的文字提示
         refreshView(LoadingFooter.State.TheEnd);
         setErrorLayout(View.GONE);
     }
@@ -178,10 +197,12 @@ public abstract class TheBaseRefreshAndLoadActivity <T> extends Activity
 
     @Override
     public void onLoadNext() {
-        page++;
-        isRefreshFromTop = false;
-        RequestParams requestParams = getRequestParams();
-        mDataPresenter.loadNext(requestParams);
+        if(!swipeRefreshLayout.isRefreshing()) {
+            page++;
+            isRefreshFromTop = false;
+            RequestParams requestParams = getRequestParams();
+            mDataPresenter.loadNext(requestParams);
+        }
     }
 
     @Override
