@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<com.flyco.roundview.RoundLinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:round="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:gravity="center"
+    android:orientation="horizontal"
+    android:visibility="gone"
+    android:padding="5dp"
+    android:layout_margin="10dp"
+    round:rv_strokeColor="@color/gray">
+
+    <!--<activitydialogtest.pczhu.com.customtestxutils.view.titanic.TitanicTextView-->
+        <!--android:id="@+id/tv_titanic"-->
+        <!--android:layout_width="wrap_content"-->
+        <!--android:layout_height="wrap_content"-->
+        <!--android:text="@string/loading"-->
+        <!--android:textColor="@android:color/holo_red_dark"-->
+        <!--android:textSize="30sp"/>-->
+
+    <com.flyco.roundview.RoundTextView
+        android:id="@+id/textView"
+        style="?android:attr/textAppearanceMediumInverse"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:textColor="@color/gray"
+        android:gravity="center"
+        android:orientation="horizontal"
+        round:rv_strokeWidth="1px"
+        android:padding="8dp"
+        android:layout_margin="10dp"
+        round:rv_cornerRadius="5dp"
+        round:rv_strokeColor="@color/gray"
+        android:textSize="13sp"
+        android:text=""
+        android:visibility="gone"
+        />
+
+    <com.wang.avi.AVLoadingIndicatorView
+        android:id="@+id/avloadingIndicatorView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:visibility="visible"
+        round:indicator="BallClipRotateMultiple"
+        round:indicator_color="#fe6917"
+        />
+</com.flyco.roundview.RoundLinearLayout>
