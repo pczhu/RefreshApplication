@@ -12,6 +12,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.nhaarman.listviewanimations.swinginadapters.AnimationAdapter;
+import com.pczhu.www.refreshapplication.MyProAttentionBean;
 import com.pczhu.www.refreshapplication.R;
 import com.pczhu.www.refreshapplication.Utils.LogUtils;
 import com.pczhu.www.refreshapplication.Utils.ThreadPoolUtils;
@@ -21,6 +22,8 @@ import com.pczhu.www.refreshapplication.baserefresh.view.LoadingFooter;
 import com.pczhu.www.refreshapplication.baserefresh.view.OnLoadNextListener;
 import com.pczhu.www.refreshapplication.baserefresh.view.PageStaggeredGridView;
 
+import org.greenrobot.eventbus.Subscribe;
+import org.greenrobot.eventbus.ThreadMode;
 import org.xutils.http.RequestParams;
 import org.xutils.x;
 
@@ -44,7 +47,7 @@ public abstract class TheBaseRefreshAndLoadActivity <T> extends Activity
     private PageStaggeredGridView pageStaggeredGridView;
     protected int page = 1;
     protected MyBaseAdapter mainAdapter;
-    private OnGetDataCallBack onActionListener;
+    private OnActionListener onActionListener;
     protected boolean isRefreshFromTop;
     protected TextView tv_error;
     protected Class<?> clz;
@@ -96,7 +99,7 @@ public abstract class TheBaseRefreshAndLoadActivity <T> extends Activity
                               MyBaseAdapter adapter,
                               Class<?> clz,
                               RequestParams requestParams,
-                              OnGetDataCallBack onActionListener){
+                              OnActionListener onActionListener){
         this.swipeRefreshLayout = swipeRefreshLayout;
         this.pageStaggeredGridView = pageStaggeredGridView;
         this.mainAdapter = adapter;
@@ -212,7 +215,7 @@ public abstract class TheBaseRefreshAndLoadActivity <T> extends Activity
 
     @NonNull
     private RequestParams getRequestParams() {
-        RequestParams requestParams = new RequestParams("http://app.renrentou.com/project/getProjectList");
+        //RequestParams requestParams = new RequestParams(url);
         requestParams.setExecutor(ThreadPoolUtils.threadPool);
         requestParams.setConnectTimeout(3 * 1000);
         requestParams.setMaxRetryCount(5);
@@ -251,14 +254,6 @@ public abstract class TheBaseRefreshAndLoadActivity <T> extends Activity
     @Override
     protected void onDestroy() {
         super.onDestroy();
-        LogUtils.i("清除数据信息" + x.app().getCacheDir().toString());
-//        if(userlist!=null)
-//            userlist.clear();
-//        if(requestParams!=null) {
-//            requestParams.clearParams();
-//            requestParams = null;
-//        }
-
     }
     /**
      * 添加错误布局
@@ -287,5 +282,37 @@ public abstract class TheBaseRefreshAndLoadActivity <T> extends Activity
     }
     protected DataPresenter getDataPresenter(){
         return mDataPresenter;
+    }
+
+    @Subscribe(threadMode = ThreadMode.MAIN) //在ui线程执行
+    public void onMessageEvent(MessageEvent<MyProAttentionBean> event) {
+        switch (event.getTpye()){
+            case 1:
+                String msg = event.getmJson();
+                if(onActionListener!=null){
+                    onActionListener.getJson(msg);
+                }
+                Toast.makeText(this,"获取到的消息："+msg,Toast.LENGTH_SHORT).show();
+                break;
+            case 2:
+                if(onActionListener!=null){
+                    onActionListener.getData(event.getmT());
+                }
+                break;
+            case 3:
+                if(onActionListener!=null){
+                    onActionListener.getFailed(event.getmFailed());
+                }
+                break;
+            case 4:
+                if(onActionListener!=null){
+                    onActionListener.getError(event.getThrowable());
+                }
+                break;
+            default:
+                break;
+
+        }
+
     }
 }

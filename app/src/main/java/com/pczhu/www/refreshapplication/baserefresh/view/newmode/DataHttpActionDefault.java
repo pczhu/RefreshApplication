@@ -41,6 +41,7 @@ public class DataHttpActionDefault<T> implements DataHttpActionInterface<T> {
                     String status = null;
 
                     messageEvent.setmJson(s);
+                    messageEvent.setTpye(1);
                     mEventBus.post(messageEvent);
                     try {
                         JSONObject dataJson=new JSONObject(s);
@@ -58,6 +59,7 @@ public class DataHttpActionDefault<T> implements DataHttpActionInterface<T> {
 
                     if(failBean == null && obj!=null ){//请求到新数据
                         messageEvent.setmT(obj);
+                        messageEvent.setTpye(0);
                         mEventBus.post(messageEvent);
                         if(isRefresh){
                             mDataUIViewInterfaceImpl.showRefreshResult(obj);
@@ -68,6 +70,7 @@ public class DataHttpActionDefault<T> implements DataHttpActionInterface<T> {
                         mDataUIViewInterfaceImpl.dissMissErrorLayout();
                     }else{//请求不到新数据了
                         messageEvent.setmFailed(failBean);
+                        messageEvent.setTpye(2);
                         mEventBus.post(messageEvent);
                         if(failBean.getStatus().equals("-4")){
                             mDataUIViewInterfaceImpl.tokenOutOfData();
@@ -100,6 +103,7 @@ public class DataHttpActionDefault<T> implements DataHttpActionInterface<T> {
                 @Override
                 public void onError(Throwable throwable, boolean b) {
                     messageEvent.setThrowable(throwable);
+                    messageEvent.setTpye(3);
                     mEventBus.post(messageEvent);
                     if(isHasOldData()){
                         mDataUIViewInterfaceImpl.showErrorNoMore();

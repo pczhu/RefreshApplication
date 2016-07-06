@@ -12,6 +12,7 @@ import com.pczhu.www.refreshapplication.Failed;
  * 修改历史：
  */
 public class MessageEvent<Object> {
+    private int tpye = -1;
     private Object mT;
     private Throwable throwable;
     private Failed mFailed;
@@ -47,5 +48,21 @@ public class MessageEvent<Object> {
 
     public void setmJson(String mJson) {
         this.mJson = mJson;
+    }
+
+    public int getTpye() {
+        return tpye;
+    }
+
+    /**
+     * 设置数据传输类似
+     * @param tpye
+     * 0 解析后的数据
+     * 1 json
+     * 2 Failed
+     * 3 Throuable
+     */
+    public void setTpye(int tpye) {
+        this.tpye = tpye;
     }
 }

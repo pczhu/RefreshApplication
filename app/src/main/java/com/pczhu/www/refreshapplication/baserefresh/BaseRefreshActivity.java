@@ -53,6 +53,9 @@ public abstract class BaseRefreshActivity<T> extends Activity implements SwipeRe
     protected ArrayList<T> userlist;
     protected RequestParams requestParams;
 
+
+    private String mEmptyDataString = "没找到相关数据";
+    private String mErrorDataString = "网络请求出现问题";
     //private Activity activity;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -333,21 +336,21 @@ public abstract class BaseRefreshActivity<T> extends Activity implements SwipeRe
         if(statue == 1){
             //1 true 请求不到新数据 界面上还没有数据  显示错误布局 没有相关数据
             if(flag == true){
-                tv_error.setText("没有找到相关数据");//先设置错误布局的文字提示
+                tv_error.setText(mEmptyDataString);//先设置错误布局的文字提示
                 refreshView(LoadingFooter.State.EMPTY_NOMORE);
             }else{
                 //1 false 请求不到新数据 界面上还有数据  显示没有更多数据
-                tv_error.setText("没有更多数据");//先设置错误布局的文字提示
+                tv_error.setText(mEmptyDataString);//先设置错误布局的文字提示
                 refreshView(LoadingFooter.State.TheEnd);
             }
         }else if(statue == 2){
             //2 true 请求失败  界面上没有数据 显示错误布局 网络出错
             if(flag == true){
-                tv_error.setText("网络请求出现问题");//先设置错误布局的文字提示
+                tv_error.setText(mErrorDataString);//先设置错误布局的文字提示
                 refreshView(LoadingFooter.State.ERROR_EMPTY);
             }else{
                 //2 false 请求失败 界面上还有数据 显示请求网络出错
-                tv_error.setText("网络请求出现问题");//先设置错误布局的文字提示
+                tv_error.setText(mErrorDataString);//先设置错误布局的文字提示
                 refreshView(LoadingFooter.State.ERROR_NOMORE);
             }
         }else if(statue == 0){
@@ -409,5 +412,12 @@ public abstract class BaseRefreshActivity<T> extends Activity implements SwipeRe
             requestParams = null;
         }
 
+    }
+    protected void setmEmptyDataString(String mEmptyDataString) {
+        this.mEmptyDataString = mEmptyDataString;
+    }
+
+    protected void setmErrorDataString(String mErrorDataString) {
+        this.mErrorDataString = mErrorDataString;
     }
 }

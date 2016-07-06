@@ -54,14 +54,7 @@ public class MainActivity extends TheBaseRefreshAndLoadActivity<MyProAttentionBe
         start();
 
     }
-    @Subscribe(threadMode = ThreadMode.MAIN) //在ui线程执行
-    public void onMessageEvent(MessageEvent<MyProAttentionBean> event) {
-        if(event.getmT() != null){
-            String msg = ((MyProAttentionBean)event.getmT()).getMsg();
 
-            Toast.makeText(this,"获取到的消息："+msg,Toast.LENGTH_SHORT).show();
-        }
-    }
     @Override
     protected ViewGroup getRootView() {
         return frameLayout;
